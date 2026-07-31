@@ -7,7 +7,6 @@ export default function FloatingPillNav({ activeTab, setActiveTab }) {
     { id: 'architecture', label: 'Architecture' },
     { id: 'code-switching', label: 'Code-Switching' },
     { id: 'benchmarks', label: 'Benchmarks' },
-    { id: 'api', label: 'API & Docs' }
   ];
 
   const pillContainerRef = useRef(null);

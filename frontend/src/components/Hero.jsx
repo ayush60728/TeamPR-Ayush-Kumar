@@ -189,25 +189,25 @@ export default function Hero({ onExplorePlayground, onOpenConsole }) {
               gap: '1rem'
             }}
           >
-            <div style={{
-              width: '42px',
-              height: '42px',
-              borderRadius: '8px',
-              backgroundColor: '#0a0a0a',
-              color: '#d5fa78',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0
-            }}>
-              <Cpu size={22} />
-            </div>
-            <div>
-              <div style={{ fontSize: '0.85rem', fontWeight: '800', color: '#0a0a0a', textTransform: 'uppercase', fontFamily: 'JetBrains Mono, monospace' }}>
-                Zero Enterprise Tax
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '0.72rem', fontWeight: '800', color: '#0a0a0a', textTransform: 'uppercase', fontFamily: 'JetBrains Mono, monospace', marginBottom: '0.6rem', letterSpacing: '0.06em' }}>
+                🤗 Base Models · Hugging Face Hosted
               </div>
-              <div style={{ fontSize: '0.875rem', color: '#1a1a1a', fontWeight: '500' }}>
-                Runs high-throughput inference on CPU &amp; edge devices without expensive heavy API lock-in.
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(213,250,120,0.15)', borderRadius: '6px', padding: '5px 10px', border: '1px solid rgba(213,250,120,0.35)' }}>
+                  <Cpu size={14} color='#0a0a0a' style={{ flexShrink: 0 }} />
+                  <div>
+                    <div style={{ fontSize: '0.78rem', fontWeight: '800', color: '#0a0a0a', fontFamily: 'JetBrains Mono, monospace' }}>l3cube-pune/hing-roberta</div>
+                    <div style={{ fontSize: '0.72rem', color: '#333', fontWeight: '500' }}>Hinglish branch · code-mixed text</div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(0,0,0,0.06)', borderRadius: '6px', padding: '5px 10px', border: '1px solid rgba(0,0,0,0.12)' }}>
+                  <Cpu size={14} color='#0a0a0a' style={{ flexShrink: 0 }} />
+                  <div>
+                    <div style={{ fontSize: '0.78rem', fontWeight: '800', color: '#0a0a0a', fontFamily: 'JetBrains Mono, monospace' }}>roberta-base</div>
+                    <div style={{ fontSize: '0.72rem', color: '#333', fontWeight: '500' }}>English branch · pure English text</div>
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>

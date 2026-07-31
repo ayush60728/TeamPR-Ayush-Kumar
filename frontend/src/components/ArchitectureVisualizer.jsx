@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { GitFork, Zap, ArrowRight } from 'lucide-react';
+import { GitFork, Zap } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -87,6 +87,26 @@ const NODES = [
   }
 ];
 
+const flowStyles = `
+  @keyframes fcDotFlow {
+    0% { stroke-dashoffset: 40; }
+    100% { stroke-dashoffset: 0; }
+  }
+  @keyframes fcNodePop {
+    0% { transform: scale(0.82); opacity: 0; }
+    70% { transform: scale(1.04); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .fc-node { animation: fcNodePop 0.42s ease-out both; }
+  .fc-1 { animation-delay: 0.0s; }
+  .fc-2 { animation-delay: 0.15s; }
+  .fc-3a { animation-delay: 0.3s; }
+  .fc-3b { animation-delay: 0.42s; }
+  .fc-4 { animation-delay: 0.56s; }
+  .fc-5 { animation-delay: 0.7s; }
+  .fc-line { animation: fcDotFlow 1.4s linear infinite; stroke-dasharray: 6 4; }
+`;
+
 export default function ArchitectureVisualizer() {
   const [selectedNode, setSelectedNode] = useState(NODES[1]);
   const sectionRef = useRef(null);
@@ -99,11 +119,7 @@ export default function ArchitectureVisualizer() {
         { y: 40, opacity: 0 },
         {
           y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '.arch-header',
-            start: 'top 85%',
-            once: true
-          }
+          scrollTrigger: { trigger: '.arch-header', start: 'top 85%', once: true }
         }
       );
       gsap.fromTo(
@@ -111,11 +127,7 @@ export default function ArchitectureVisualizer() {
         { x: -50, opacity: 0 },
         {
           x: 0, opacity: 1, duration: 0.75, ease: 'power3.out', delay: 0.1,
-          scrollTrigger: {
-            trigger: '.arch-left-col',
-            start: 'top 85%',
-            once: true
-          }
+          scrollTrigger: { trigger: '.arch-left-col', start: 'top 85%', once: true }
         }
       );
       gsap.fromTo(
@@ -123,11 +135,7 @@ export default function ArchitectureVisualizer() {
         { x: 50, opacity: 0 },
         {
           x: 0, opacity: 1, duration: 0.75, ease: 'power3.out', delay: 0.2,
-          scrollTrigger: {
-            trigger: '.arch-right-col',
-            start: 'top 85%',
-            once: true
-          }
+          scrollTrigger: { trigger: '.arch-right-col', start: 'top 85%', once: true }
         }
       );
     }, sectionRef);
@@ -141,6 +149,8 @@ export default function ArchitectureVisualizer() {
       margin: '0 auto',
       padding: '4rem 1.5rem'
     }}>
+      <style>{flowStyles}</style>
+
       {/* Header */}
       <div className="arch-header" style={{ marginBottom: '2.5rem' }}>
         <div style={{
@@ -166,85 +176,150 @@ export default function ArchitectureVisualizer() {
           How IndicDetect Eliminates False Positives
         </h2>
         <p style={{ color: '#9ca3af', fontSize: '1rem', marginTop: '0.25rem' }}>
-          Interactive workflow diagram. Click on any pipeline stage to inspect code and technical specifications.
+          Interactive workflow diagram. Click any pipeline stage to inspect code and technical specifications.
         </p>
       </div>
 
-      {/* Grid: Workflow Diagram & Detail Inspector */}
+      {/* Grid: Flowchart & Detail Inspector */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
         gap: '2rem'
       }}>
-        {/* Left Side: Pipeline Nodes Visual Flow */}
-        <div className="arch-left-col dark-card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#ffffff', fontFamily: 'Space Grotesk, sans-serif', marginBottom: '0.5rem' }}>
-            Pipeline Topology
+        {/* Left Side: Animated Flowchart */}
+        <div className="arch-left-col dark-card" style={{ display: 'flex', flexDirection: 'column', padding: '1.5rem 1.25rem', overflow: 'hidden' }}>
+          <h3 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#ffffff', fontFamily: 'Space Grotesk, sans-serif', marginBottom: '1.25rem' }}>
+            Pipeline Flowchart
           </h3>
 
-          {NODES.map((node, i) => {
-            const isSelected = selectedNode.id === node.id;
-            const isBranchNode = node.id.includes('branch');
-            return (
-              <motion.div
-                key={node.id}
-                onClick={() => setSelectedNode(node)}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.08, duration: 0.4, ease: 'easeOut' }}
-                whileHover={{ scale: 1.02, x: 4 }}
-                whileTap={{ scale: 0.98 }}
-                style={{
-                  backgroundColor: isSelected ? 'rgba(212, 252, 52, 0.08)' : '#0a0b0d',
-                  border: `1px solid ${isSelected ? '#d5fa78' : '#22262e'}`,
-                  borderRadius: '12px',
-                  padding: '1rem 1.25rem',
-                  cursor: 'pointer',
-                  transition: 'border-color 0.25s ease, background-color 0.25s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginLeft: isBranchNode ? '1.5rem' : '0'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <motion.div
-                    animate={{
-                      backgroundColor: isSelected ? '#d5fa78' : '#1a1d24',
-                      color: isSelected ? '#0a0a0a' : '#d5fa78'
-                    }}
-                    transition={{ duration: 0.25 }}
-                    style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '8px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: '800',
-                      fontSize: '0.85rem',
-                      fontFamily: 'JetBrains Mono, monospace'
-                    }}
-                  >
-                    {node.id === 'input' ? 'IN' : node.id === 'router' ? 'RT' : node.id === 'telemetry' ? 'TM' : node.id === 'output' ? 'OUT' : 'ML'}
-                  </motion.div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', gap: '0' }}>
 
-                  <div>
-                    <div style={{ fontSize: '0.95rem', fontWeight: '700', color: isSelected ? '#d5fa78' : '#f3f4f6', transition: 'color 0.2s ease' }}>
-                      {node.title}
-                    </div>
-                    <div style={{ fontSize: '0.75rem', color: '#9ca3af', fontFamily: 'JetBrains Mono, monospace' }}>
-                      {node.tech}
-                    </div>
-                  </div>
-                </div>
+            {/* NODE 1: Input */}
+            <div className="fc-node fc-1" onClick={() => setSelectedNode(NODES[0])} style={{
+              cursor: 'pointer', width: '100%',
+              backgroundColor: selectedNode.id === 'input' ? 'rgba(213,250,120,0.1)' : '#0e1016',
+              border: `1.5px solid ${selectedNode.id === 'input' ? '#d5fa78' : '#2b303c'}`,
+              borderRadius: '10px', padding: '10px 14px',
+              display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.22s ease',
+            }}>
+              <div style={{ width: '30px', height: '30px', borderRadius: '8px', backgroundColor: '#d5fa78', color: '#0a0a0a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '0.6rem', fontFamily: 'JetBrains Mono, monospace', flexShrink: 0 }}>IN</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: '700', color: selectedNode.id === 'input' ? '#d5fa78' : '#f3f4f6' }}>User Text Submission</div>
+                <div style={{ fontSize: '0.65rem', color: '#6b7280', fontFamily: 'JetBrains Mono, monospace', marginTop: '1px' }}>FastAPI / Pydantic</div>
+              </div>
+            </div>
 
-                <motion.div animate={{ x: isSelected ? 4 : 0 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
-                  <ArrowRight size={16} color={isSelected ? '#d5fa78' : '#4b5563'} />
-                </motion.div>
-              </motion.div>
-            );
-          })}
+            {/* Connector 1→2 */}
+            <svg width="14" height="30" viewBox="0 0 14 30" fill="none" style={{ flexShrink: 0 }}>
+              <line x1="7" y1="0" x2="7" y2="21" stroke="#d5fa78" strokeWidth="1.5" className="fc-line" />
+              <polygon points="7,30 2,19 12,19" fill="#d5fa78" />
+            </svg>
+
+            {/* NODE 2: Router */}
+            <div className="fc-node fc-2" onClick={() => setSelectedNode(NODES[1])} style={{
+              cursor: 'pointer', width: '100%',
+              backgroundColor: selectedNode.id === 'router' ? 'rgba(59,130,246,0.1)' : '#0e1016',
+              border: `1.5px solid ${selectedNode.id === 'router' ? '#3b82f6' : '#1e3a5f'}`,
+              borderRadius: '10px', padding: '10px 14px',
+              display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.22s ease',
+            }}>
+              <div style={{ width: '30px', height: '30px', borderRadius: '8px', backgroundColor: '#1d4ed8', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '0.6rem', fontFamily: 'JetBrains Mono, monospace', flexShrink: 0 }}>RT</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: '700', color: selectedNode.id === 'router' ? '#60a5fa' : '#f3f4f6' }}>Heuristic Language Router</div>
+                <div style={{ fontSize: '0.65rem', color: '#6b7280', fontFamily: 'JetBrains Mono, monospace', marginTop: '1px' }}>Hindi ratio ≥ 0.12 → Hinglish branch</div>
+              </div>
+              <div style={{ fontSize: '0.55rem', color: '#60a5fa', border: '1px solid #1d4ed8', borderRadius: '4px', padding: '2px 5px', fontFamily: 'JetBrains Mono, monospace', flexShrink: 0 }}>GATE</div>
+            </div>
+
+            {/* Fork SVG: splits into two branches */}
+            <svg width="100%" height="44" viewBox="0 0 240 44" preserveAspectRatio="none" style={{ flexShrink: 0 }}>
+              <line x1="120" y1="0" x2="120" y2="14" stroke="#4b5563" strokeWidth="1.5" className="fc-line" />
+              <line x1="60" y1="14" x2="180" y2="14" stroke="#4b5563" strokeWidth="1.5" />
+              <line x1="60" y1="14" x2="60" y2="35" stroke="#eab308" strokeWidth="1.5" className="fc-line" />
+              <polygon points="60,43 55,33 65,33" fill="#eab308" />
+              <line x1="180" y1="14" x2="180" y2="35" stroke="#38bdf8" strokeWidth="1.5" className="fc-line" />
+              <polygon points="180,43 175,33 185,33" fill="#38bdf8" />
+            </svg>
+
+            {/* BRANCHES ROW */}
+            <div style={{ display: 'flex', gap: '0.6rem', width: '100%' }}>
+              {/* 3A: HingRoBERTa */}
+              <div className="fc-node fc-3a" onClick={() => setSelectedNode(NODES[2])} style={{
+                cursor: 'pointer', flex: 1,
+                backgroundColor: selectedNode.id === 'hinglish_branch' ? 'rgba(234,179,8,0.1)' : '#0e1016',
+                border: `1.5px solid ${selectedNode.id === 'hinglish_branch' ? '#eab308' : '#422006'}`,
+                borderRadius: '10px', padding: '10px 10px', transition: 'all 0.22s ease',
+              }}>
+                <div style={{ fontSize: '0.58rem', color: '#eab308', fontFamily: 'JetBrains Mono, monospace', fontWeight: '700', marginBottom: '4px' }}>3A · HINGLISH</div>
+                <div style={{ fontSize: '0.76rem', fontWeight: '700', color: '#f3f4f6', lineHeight: '1.25' }}>HingRoBERTa</div>
+                <div style={{ fontSize: '0.6rem', color: '#78716c', fontFamily: 'JetBrains Mono, monospace', marginTop: '3px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>l3cube-pune/hing-roberta</div>
+                <div style={{ marginTop: '5px', display: 'inline-block', fontSize: '0.58rem', backgroundColor: 'rgba(234,179,8,0.12)', color: '#eab308', border: '1px solid #78350f', borderRadius: '4px', padding: '1px 5px', fontFamily: 'JetBrains Mono, monospace' }}>94.8% F1</div>
+              </div>
+
+              {/* 3B: RoBERTa-Base */}
+              <div className="fc-node fc-3b" onClick={() => setSelectedNode(NODES[3])} style={{
+                cursor: 'pointer', flex: 1,
+                backgroundColor: selectedNode.id === 'english_branch' ? 'rgba(56,189,248,0.1)' : '#0e1016',
+                border: `1.5px solid ${selectedNode.id === 'english_branch' ? '#38bdf8' : '#0c4a6e'}`,
+                borderRadius: '10px', padding: '10px 10px', transition: 'all 0.22s ease',
+              }}>
+                <div style={{ fontSize: '0.58rem', color: '#38bdf8', fontFamily: 'JetBrains Mono, monospace', fontWeight: '700', marginBottom: '4px' }}>3B · ENGLISH</div>
+                <div style={{ fontSize: '0.76rem', fontWeight: '700', color: '#f3f4f6', lineHeight: '1.25' }}>RoBERTa-Base</div>
+                <div style={{ fontSize: '0.6rem', color: '#78716c', fontFamily: 'JetBrains Mono, monospace', marginTop: '3px' }}>roberta-base</div>
+                <div style={{ marginTop: '5px', display: 'inline-block', fontSize: '0.58rem', backgroundColor: 'rgba(56,189,248,0.1)', color: '#38bdf8', border: '1px solid #0c4a6e', borderRadius: '4px', padding: '1px 5px', fontFamily: 'JetBrains Mono, monospace' }}>Fine-tuned</div>
+              </div>
+            </div>
+
+            {/* Merge SVG: two branches → telemetry */}
+            <svg width="100%" height="44" viewBox="0 0 240 44" preserveAspectRatio="none" style={{ flexShrink: 0 }}>
+              <line x1="60" y1="0" x2="60" y2="14" stroke="#4b5563" strokeWidth="1.5" className="fc-line" />
+              <line x1="180" y1="0" x2="180" y2="14" stroke="#4b5563" strokeWidth="1.5" className="fc-line" />
+              <line x1="60" y1="14" x2="180" y2="14" stroke="#4b5563" strokeWidth="1.5" />
+              <line x1="120" y1="14" x2="120" y2="35" stroke="#a855f7" strokeWidth="1.5" className="fc-line" />
+              <polygon points="120,43 115,33 125,33" fill="#a855f7" />
+            </svg>
+
+            {/* NODE 4: Telemetry */}
+            <div className="fc-node fc-4" onClick={() => setSelectedNode(NODES[4])} style={{
+              cursor: 'pointer', width: '100%',
+              backgroundColor: selectedNode.id === 'telemetry' ? 'rgba(168,85,247,0.1)' : '#0e1016',
+              border: `1.5px solid ${selectedNode.id === 'telemetry' ? '#a855f7' : '#3b0764'}`,
+              borderRadius: '10px', padding: '10px 14px',
+              display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.22s ease',
+            }}>
+              <div style={{ width: '30px', height: '30px', borderRadius: '8px', backgroundColor: '#7c3aed', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '0.6rem', fontFamily: 'JetBrains Mono, monospace', flexShrink: 0 }}>TM</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: '700', color: selectedNode.id === 'telemetry' ? '#c084fc' : '#f3f4f6' }}>Code-Switch Telemetry</div>
+                <div style={{ fontSize: '0.65rem', color: '#6b7280', fontFamily: 'JetBrains Mono, monospace', marginTop: '1px' }}>Hindi% · English% · Switch ratio</div>
+              </div>
+            </div>
+
+            {/* Connector 4→5 */}
+            <svg width="14" height="30" viewBox="0 0 14 30" fill="none" style={{ flexShrink: 0 }}>
+              <line x1="7" y1="0" x2="7" y2="21" stroke="#22c55e" strokeWidth="1.5" className="fc-line" />
+              <polygon points="7,30 2,19 12,19" fill="#22c55e" />
+            </svg>
+
+            {/* NODE 5: Output */}
+            <div className="fc-node fc-5" onClick={() => setSelectedNode(NODES[5])} style={{
+              cursor: 'pointer', width: '100%',
+              backgroundColor: selectedNode.id === 'output' ? 'rgba(34,197,94,0.1)' : '#0e1016',
+              border: `1.5px solid ${selectedNode.id === 'output' ? '#22c55e' : '#14532d'}`,
+              borderRadius: '10px', padding: '10px 14px',
+              display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.22s ease',
+            }}>
+              <div style={{ width: '30px', height: '30px', borderRadius: '8px', backgroundColor: '#15803d', color: '#d5fa78', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '0.55rem', fontFamily: 'JetBrains Mono, monospace', flexShrink: 0 }}>OUT</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: '700', color: selectedNode.id === 'output' ? '#22c55e' : '#f3f4f6' }}>Combined Verdict Payload</div>
+                <div style={{ fontSize: '0.65rem', color: '#6b7280', fontFamily: 'JetBrains Mono, monospace', marginTop: '1px' }}>label · confidence · language_detected</div>
+              </div>
+              <div style={{ fontSize: '0.55rem', color: '#22c55e', border: '1px solid #15803d', borderRadius: '4px', padding: '2px 5px', fontFamily: 'JetBrains Mono, monospace', flexShrink: 0 }}>JSON</div>
+            </div>
+
+            <div style={{ marginTop: '0.9rem', fontSize: '0.65rem', color: '#374151', fontFamily: 'JetBrains Mono, monospace', textAlign: 'center' }}>
+              ↑ Click any node to inspect details →
+            </div>
+          </div>
         </div>
 
         {/* Right Side: Selected Node Technical Deep Dive */}

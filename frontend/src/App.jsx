@@ -8,7 +8,6 @@ import Playground from './components/Playground';
 import ArchitectureVisualizer from './components/ArchitectureVisualizer';
 import CodeSwitchingSuite from './components/CodeSwitchingSuite';
 import BenchmarkComparison from './components/BenchmarkComparison';
-import ApiConsole from './components/ApiConsole';
 import FloatingPillNav from './components/FloatingPillNav';
 import SystemInfoModal from './components/SystemInfoModal';
 import CustomCursor from './components/CustomCursor';
@@ -21,7 +20,6 @@ const SECTIONS = [
   'architecture',
   'code-switching',
   'benchmarks',
-  'api',
 ];
 
 export default function App() {
@@ -171,15 +169,6 @@ export default function App() {
 
         <BenchmarkComparison />
 
-        <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          whileInView={{ scaleX: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          style={{ height: '1px', backgroundColor: '#1a1d24', margin: '2rem 0', transformOrigin: 'center' }}
-        />
-
-        <ApiConsole />
       </main>
 
       {/* Footer */}

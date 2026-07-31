@@ -1,5 +1,5 @@
 import React from 'react';
-import { Info } from 'lucide-react';
+import { Users } from 'lucide-react';
 
 export default function Header({ activeTab, setActiveTab, onOpenConsole }) {
   return (
@@ -126,40 +126,28 @@ export default function Header({ activeTab, setActiveTab, onOpenConsole }) {
           >
             Benchmarks
           </button>
-
-          <button 
-            onClick={() => setActiveTab('api')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: activeTab === 'api' ? '#d5fa78' : '#9ca3af',
-              fontSize: '0.875rem',
-              fontWeight: activeTab === 'api' ? '700' : '500',
-              cursor: 'pointer',
-              transition: 'color 0.2s ease'
-            }}
-          >
-            API & Docs
-          </button>
         </nav>
 
         {/* Action Button: Info Circle Icon Button */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <button 
             onClick={onOpenConsole}
-            title="View Technical System Specifications"
+            title="Meet our Developers"
             style={{
               backgroundColor: '#121212',
-              color: '#ffffff',
+              color: '#d5fa78',
               border: '1px solid #333333',
-              borderRadius: '50%',
-              width: '38px',
-              height: '38px',
+              borderRadius: '8px',
+              padding: '6px 14px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              gap: '6px',
               cursor: 'pointer',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
+              fontSize: '0.8rem',
+              fontWeight: '700',
+              fontFamily: 'Space Grotesk, sans-serif',
+              whiteSpace: 'nowrap'
             }}
             onMouseOver={(e) => {
               e.currentTarget.style.backgroundColor = '#d5fa78';
@@ -168,11 +156,12 @@ export default function Header({ activeTab, setActiveTab, onOpenConsole }) {
             }}
             onMouseOut={(e) => {
               e.currentTarget.style.backgroundColor = '#121212';
-              e.currentTarget.style.color = '#ffffff';
+              e.currentTarget.style.color = '#d5fa78';
               e.currentTarget.style.borderColor = '#333333';
             }}
           >
-            <Info size={18} />
+            <Users size={14} />
+            Meet our Developers
           </button>
         </div>
       </div>
