@@ -18,7 +18,7 @@ const TEAM_MEMBERS = [
   {
     id: 2,
     name: 'Prasanna Pratap Singh',
-    role: 'Full Stack Engineer',
+    role: 'Full Stack & Devops Engineer',
     avatar: '/avatars/Prasanna_pic.jpeg',
     bio: 'Builds the end-to-end application stack — connecting the AI backend to a responsive, high-performance frontend. Owns API integration, state management, and the real-time telemetry pipeline.',
     skills: ['React', 'Node.js', 'REST APIs', 'Vite'],
